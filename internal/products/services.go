@@ -2,19 +2,27 @@ package products
 
 import (
 	"context"
+
+	repo "github.com/bruneldev/ecom-api/internal/adapter/postgresql"
 )
 
 type Service interface {
-	ListProducts(ctx context.Context) error
+	GetProduct(ctx context.Context, id int64) (repo.Product, error)
+	GetProductsList(ctx context.Context) ([]repo.Product, error)
 }
 
 type svc struct {
+	repo repo.Querier
 }
 
-func (svc *svc) ListProducts(ctx context.Context) error {
-	return nil
+func (svc *svc) GetProductsList(ctx context.Context) ([]repo.Product, error) {
+	return svc.repo.GetProductsList(ctx)
 }
 
-func NewService() Service {
-	return &svc{}
+func (svc *svc) GetProduct(ctx context.Context, id int64) (repo.Product, error) {
+	return svc.repo.GetProduct(ctx, id)
+}
+
+func NewService(repo repo.Querier) Service {
+	return &svc{repo : repo }
 }

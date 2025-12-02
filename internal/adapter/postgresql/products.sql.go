@@ -9,11 +9,11 @@ import (
 	"context"
 )
 
-const getProduct = `-- name: getProduct :one
+const getProduct = `-- name: GetProduct :one
 SELECT id, name, price_in_cent, quantity FROM products WHERE id = $1
 `
 
-func (q *Queries) getProduct(ctx context.Context, id int64) (Product, error) {
+func (q *Queries) GetProduct(ctx context.Context, id int64) (Product, error) {
 	row := q.db.QueryRow(ctx, getProduct, id)
 	var i Product
 	err := row.Scan(
@@ -25,11 +25,11 @@ func (q *Queries) getProduct(ctx context.Context, id int64) (Product, error) {
 	return i, err
 }
 
-const getProductsList = `-- name: getProductsList :many
+const getProductsList = `-- name: GetProductsList :many
 SELECT id, name, price_in_cent, quantity FROM products
 `
 
-func (q *Queries) getProductsList(ctx context.Context) ([]Product, error) {
+func (q *Queries) GetProductsList(ctx context.Context) ([]Product, error) {
 	rows, err := q.db.Query(ctx, getProductsList)
 	if err != nil {
 		return nil, err
